@@ -28,13 +28,6 @@ personSchema.set("toJSON", {
   },
 });
 
-// Person.find({}).then((result) => {
-//   result.forEach((person) => {
-//     console.log(person.name, person.number);
-//   });
-//   mongoose.connection.close();
-// });
-
 module.exports = mongoose.model("Person", personSchema);
 
 // person.save().then((result) => {
