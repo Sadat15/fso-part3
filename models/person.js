@@ -14,8 +14,52 @@ mongoose
   });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: (val) => {
+        dashCounter = 0;
+        for (let i = 0; i < val.length; i++) {
+          if (val[i] === "-") {
+            dashCounter++;
+          }
+        }
+        if (dashCounter !== 1) {
+          return false;
+        }
+
+        function isStringNumeric(inputString) {
+          for (let i = 0; i < inputString.length; i++) {
+            if (isNaN(parseInt(inputString[i]))) {
+              return false;
+            }
+          }
+          return true;
+        }
+
+        if (
+          isStringNumeric(val.substring(0, 2)) &&
+          isStringNumeric(val.slice(3))
+        ) {
+          return true;
+        } else if (
+          isStringNumeric(val.substring(0, 3)) &&
+          isStringNumeric(val.slice(4))
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+  },
 });
 
 const Person = mongoose.model("Person", personSchema);
